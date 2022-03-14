@@ -1,0 +1,4 @@
+-- Warrior
+
+Raven.classConditions.WARRIOR = {
+}

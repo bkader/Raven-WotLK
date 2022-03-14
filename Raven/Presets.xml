@@ -1,0 +1,14 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+<Script file="Presets\DeathKnight.lua"/>
+<Script file="Presets\Druid.lua"/>
+<Script file="Presets\Hunter.lua"/>
+<Script file="Presets\Mage.lua"/>
+<Script file="Presets\Paladin.lua"/>
+<Script file="Presets\Priest.lua"/>
+<Script file="Presets\Rogue.lua"/>
+<Script file="Presets\Shaman.lua"/>
+<Script file="Presets\Warlock.lua"/>
+<Script file="Presets\Warrior.lua"/>
+<Script file="Presets\General.lua"/>
+</Ui>

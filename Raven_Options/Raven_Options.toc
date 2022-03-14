@@ -1,0 +1,13 @@
+## Interface: 30300
+## Title: Raven Options
+## Notes: Load on demand options panel for Raven
+## Author: Tomber
+## Version: r541
+## Dependencies: Raven
+## LoadOnDemand: 1
+
+#@no-lib-strip@
+Embeds.xml
+#@end-no-lib-strip@
+
+Options.lua

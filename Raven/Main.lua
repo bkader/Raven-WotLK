@@ -410,7 +410,7 @@ local function AddTracker(dstGUID, dstName, isBuff, name, rank, icon, count, bty
 		t = AllocateTable()
 		tracker[id] = t
 	end -- create the tracker if necessary
-	local vehicle = not MOD.isClassic and UnitHasVehicleUI("player")
+	local vehicle = UnitHasVehicleUI("player")
 
 	local tag = isBuff and "T-Buff:" or "T-Debuff:" -- build a unique tag for this aura (this is a bit simpler than the AddAura version)
 	local guid = UnitGUID(caster)
@@ -1135,7 +1135,10 @@ function MOD:OnEnable()
 	-- Register events called prior to starting play
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("UNIT_AURA")
-	self:RegisterEvent("UNIT_POWER_UPDATE")
+	self:RegisterEvent("UNIT_MANA", "UNIT_POWER_UPDATE")
+	self:RegisterEvent("UNIT_RAGE", "UNIT_POWER_UPDATE")
+	self:RegisterEvent("UNIT_ENERGY", "UNIT_POWER_UPDATE")
+	self:RegisterEvent("UNIT_RUNIC_POWER", "UNIT_POWER_UPDATE")
 	self:RegisterEvent("UNIT_PET")
 	self:RegisterEvent("UNIT_TARGET")
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -1661,13 +1664,9 @@ end
 -- Check if a GUID belongs to a boss per LibBossIDs
 function MOD.CheckLibBossIDs(guid)
 	if type(guid) == "string" then
-		local id
-		_, _, _, _, _, id = string.match(guid, "(%a+)%-(%d+)%-(%d+)%-(%d+)%-(%d+)%-(%d+)")
-		if id then
-			id = tonumber(id)
-			if id and MOD.LibBossIDs.BossIDs[id] then
-				return true
-			end
+		local id = MOD.GetCreatureId(guid)
+		if id and MOD.LibBossIDs.BossIDs[id] then
+			return true
 		end
 	end
 	return false
@@ -1684,7 +1683,7 @@ local function AddAura(unit, name, isBuff, spellID, count, btype, duration, cast
 		if caster then
 			guid = UnitGUID(caster)
 			cname = UnitName(caster)
-			vehicle = not MOD.isClassic and UnitHasVehicleUI(caster)
+			vehicle = UnitHasVehicleUI(caster)
 			if guid then
 				local unitType = string.match(guid, "(%a+)%-")
 				isNPC = (unitType == "Creature") or (unitType == "Vignette")
@@ -2028,7 +2027,7 @@ local function GetBuffs(unit)
 	if unit ~= "player" then
 		return
 	end -- done for all but player, players also need to add vehicle buffs
-	if MOD.isClassic or not UnitHasVehicleUI("player") then
+	if not UnitHasVehicleUI("player") then
 		return
 	end
 	i = 1
@@ -2075,7 +2074,7 @@ local function GetDebuffs(unit)
 	if unit ~= "player" then
 		return
 	end -- done for all but player, players also need to add vehicle debuffs
-	if MOD.isClassic or not UnitHasVehicleUI("player") then
+	if not UnitHasVehicleUI("player") then
 		return
 	end
 	i = 1
@@ -2100,10 +2099,6 @@ end
 
 -- Add tracking auras (updated for Cataclysm which allows multiple active tracking types)
 local function GetTracking()
-	if MOD.isClassic then
-		return
-	end -- not supported in classic
-
 	local notTracking, notTrackingIcon, found = L["Not Tracking"], "Interface\\Minimap\\Tracking\\None", false
 	for i = 1, GetNumTrackingTypes() do
 		local tracking, trackingIcon, active = GetTrackingInfo(i)

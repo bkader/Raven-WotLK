@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title: Raven
 ## Notes: Monitors buffs, debuffs and cooldowns and provides timer bars and icons plus helpful notifications
-## Author: Tomber
+## Author: Tomber (Kader Backport)
 ## Version: r541
 ## DefaultState: enabled
 ## SavedVariables: RavenDB
@@ -11,7 +11,6 @@ Embeds.xml
 #@end-no-lib-strip@
 
 Locales.xml
-
 Main.lua
 Profile.lua
 Conditions.lua

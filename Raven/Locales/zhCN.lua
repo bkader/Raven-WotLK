@@ -112,11 +112,6 @@ L["No Pet"] = "无宠物"
 L["Level String"] = function(x, level) return string.format("等级 %s %d", x, level) end
 L["Health String"] = function(x, minHealth) return string.format("生命值 %s %d%%", x, minHealth) end
 L["Power String"] = function(x, minPower) return string.format("能量值 %s %d", x, minPower) end
-L["Holy Power String"] = function(x, minPower) return string.format("圣能 %s %d", x, minPower) end
-L["Shards String"] = function(x, minShards) return string.format("灵魂碎片 %s %d", x, minShards) end
-L["Eclipse String"] = function(x, power) return string.format("月蚀能量 %s %d", x, power) end
-L["Solar Eclipse"] = true
-L["Lunar Eclipse"] = true
 L["Combo Pts String"] = function(x, minComboPoints) return string.format("连击点: %s %d", x, minComboPoints) end
 L["Stance String"] = function(stance) return string.format("姿态 = \"%s\"", stance) end
 L["Talent String"] = function(talent) return string.format("天赋 = \"%s\"", talent) end
@@ -240,7 +235,7 @@ L["If checked, Raven will not play sound effects."] = "Raven将不播放音效"
 L["Minimap Icon"] = "小地图图标"
 L["If checked, Raven will add an icon to the minimap."] ="显示小地图图标"
 L["Standard Bar Groups"] = "默认的计时条组"
-L["Anchor description"] = "Raven 可以让你显示buff\debuff\冷却的图标和监视条 " ..
+L["Anchor description"] = "Raven 可以让你显示buff\"debuff\"冷却的图标和监视条 " ..
 	'你可以在 "计时条组" 标签下进行设置,以配置一个个性化的界面. ' ..
 	"想要开始的话,很简单,用列出默认的计时条组开始下手吧. " ..
 	'选择你喜欢的计时条组,然后按"以条创建"或"以图标创建". ' ..
@@ -280,7 +275,7 @@ L["Delete the selected bar groups."] = "删除选定的计时条组"
 L["Delete standard string"] = "删除计时条组\n确定删除选定的计时条组?"
 L["Bar Group Anchors"] = "计时条组锚点"
 L["Bar group anchor string"] = "计时条组锚点决定将在哪里显示监视条 " ..
-	"锚点的提示将列出有帮助的快捷方式(例如:在锚点上改变监视条的增长方向\测试等). " ..
+	"锚点的提示将列出有帮助的快捷方式(例如:在锚点上改变监视条的增长方向测试等). " ..
 	"你可以点击左键以拖动锚点。 " ..
 	"当你对位置满意时你可以点击右键锁定. " ..
 	'锁定的锚点将被隐藏--点击 "解锁全部锚点"按钮以显示他们.\n'
@@ -291,7 +286,7 @@ L["Unlock and show the anchors for all bar groups."] = "解锁并显示全部计
 
 -- Defaults tab
 L["Defaults"] = "默认"
-L["Defaults string"] = "在计时条组里的监视条拥有例如尺寸\字体和纹理的外观选项 " ..
+L["Defaults string"] = "在计时条组里的监视条拥有例如尺寸字体和纹理的外观选项 " ..
 	"您可以在这个选项界面中调整这些选项的默认值. " ..
 	"这些设置将被所有的配置文件所共同采用，以便您使用多个角色.\n"
 L["Bar Configurations"] = "条 配置"
@@ -1084,17 +1079,6 @@ L["If checked, test the player's health."] ="测试:玩家生命"
 L["If checked, player's health must be at least this percentage, otherwise must be less."] = "勾选,则玩家生命必须高于这个百分比,否则必须低于"
 L["If checked, test the player's power (i.e., mana, rage, energy, focus, runic power)."] = "测试:玩家法力值"
 L["If checked, player's power must be at least this percentage, otherwise must be less."] = "勾选,则玩家法力值必须高于这个百分比,否则必须低于"
-L["If checked, test the player's holy power."] = "测试:玩家的圣能"
-L["If checked, player's holy power must be at least this many charges, otherwise must be less."] = "勾选,则玩家圣能必须高于这个数字,否则必须低于"
-L["If checked, test the player's number of soul shards."] = "测试:玩家的灵魂碎片"
-L["If checked, player's holy power must be at least this many charges, otherwise must be less."] ="勾选,则玩家灵魂碎片必须高于这个数字,否则必须低于"
-L["If checked, test the player's eclipse power. You can set power level (-100 to -1 for lunar power, 1 to 100 for solar power) and the comparison to use (either less or greater than the power level)."] = "测试：玩家月蚀能量.你可以设置基本能量进行测试"
-L["If checked, player's eclipse power must be at least this level, otherwise must be less."] ="勾选,则玩家的月蚀能量必须高于这个数字,否则必须低于"
-L["If checked, test the player's eclipse status. You can test current eclipse direction (toward sun or moon) and whether lunar or solar eclipse is active."] = "测试:玩家的月蚀状态"
-L["If checked, player must be in Solar Eclipse."] = "勾选,则玩家必须在日蚀"
-L["If checked, player must be in Lunar Eclipse."] = "勾选,则玩家必须在日蚀"
-L["If checked, eclipse direction must be going toward the sun."] = "勾选,则玩家的月蚀能量必须正在向日蚀方向移动"
-L["If checked, eclipse direction must be going toward the moon."] ="勾选,则玩家的日蚀能量必须正在向月蚀方向移动"
 L["Available"] = "可用"
 L["If checked, test the player's rune status."] ="测试:玩家符文"
 L["Any"] = "任意"
@@ -1121,15 +1105,6 @@ L["Enter name of specific totem to check is active."] = "输入要监视激活�
 L["Health"] = "生命"
 L["Power"] = "法力"
 L["Minimum"] = "最小"
-L["Holy Power"] = "圣能"
-L["Soul Shards"] = "灵魂碎片"
-L["Eclipse Power"] = "月蚀能量"
-L["Eclipse State"] = "月蚀状态"
-L["Eclipse"] = "蚀"
-L["Solar"] = "日"
-L["Lunar"] = "月"
-L[">> Sun"] = ">>日"
-L[">> Moon"] = ">>月"
 L["Combo Points"] = "连击点"
 L["If checked, test if the player has a mainhand weapon equipped with at least the specified item level."] = "勾选,测试玩家的主手武器物品等级必须高于设定值"
 L["If checked, test if the player has an offhand weapon equipped with at least the specified item level."] ="勾选,测试玩家的副手武器物品等级必须高于设定值"
@@ -1353,9 +1328,6 @@ L["If checked, item must be ready."] = "如果勾选, 物品必须可以使用."
 L["If checked, item must not be ready."] = "如果勾选, 物品必须不可使用."
 L["If checked, test item count."] = "如果勾选, 检测物品数量."
 L["Enter value to compare with item count."] = "输入物品数量参考值."
-L["Charges"] = "费用"
-L["If checked, test the number of charges on the item(s)."] = "如果勾选, 测试物品所需费用."
-L["Enter value to compare with the number of charges."] = "输入物品所需费用的参考值."
 
 -- Conditions > Tests > Result
 L["Dependencies"] = "依赖关系"

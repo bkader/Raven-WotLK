@@ -95,7 +95,10 @@ local function GetSortedListEntry(list, n) for i, k in pairs(GetSortedList(list)
 
 local function CheckListEntry(list, n)
 	if n then return n end
-	for i, k in pairs(GetSortedList(list)) do return k end -- if n is nil then return first entry in list
+	local t = GetSortedList(list)
+	return next(t)
+	-- TODO: CHECKME
+	-- for i, k in pairs(GetSortedList(list)) do return k end -- if n is nil then return first entry in list
 end
 
 -- Update the addon when the profile changes
@@ -110,7 +113,7 @@ local function InitializeOptions()
 	initialized = true -- only do this once
 	local options = MOD.OptionsTable
 	options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(MOD.db) -- fill in the profile section
-	options.args.profile.disabled = function(info) return InMode() end,
+	options.args.profile.disabled = function(info) return InMode() end
 
 	acereg:RegisterOptionsTable("Raven", options)
 	acereg:RegisterOptionsTable("Raven: "..options.args.FrontPage.name, options.args.FrontPage)
@@ -1772,7 +1775,9 @@ end
 
 -- Check if font changes are currently ineffective because Tukui/ElvUI fonts are enabled
 local function ValidateFontChange()
-	if Raven.db.global.TukuiFont and ChatFrame1 then print("Raven: Tukui/ElvUI font currently enabled, change on Defaults tab to use custom fonts") end
+	if Raven.db.global.TukuiFont and Raven.frame.SetTemplate and ChatFrame1 then
+		print("Raven: Tukui/ElvUI font currently enabled, change on Defaults tab to use custom fonts")
+	end
 	return true
 end
 
@@ -2074,116 +2079,20 @@ MOD.OptionsTable = {
 						HideResources = {
 							type = "group", order = 20, name = L["Resources"], inline = true,
 							args = {
-								HideComboPoints = {
-									type = "toggle", order = 10, name = L["Combo Points"],
-									desc = L["Hide default user interface for combo points."],
-									get = function(info) return MOD.db.profile.hideBlizzComboPoints end,
-									set = function(info, value) MOD.db.profile.hideBlizzComboPoints = value; MOD:UpdateAllBarGroups() end,
-								},
 								HideRunesGroup = {
-									type = "toggle", order = 15, name = L["Runes"],
+									type = "toggle", order = 10, name = L["Runes"],
 									desc = L["Hide default user interface for runes."],
 									get = function(info) return MOD.db.profile.hideRunes end,
 									set = function(info, value) MOD.db.profile.hideRunes = value; MOD:UpdateAllBarGroups() end,
 								},
-								Space1 = { type = "description", name = "", order = 35 },
 								HideTotems = {
-									type = "toggle", order = 55, name = L["Totems"], width = "half",
+									type = "toggle", order = 20, name = L["Totems"], width = "half",
 									desc = L["Hide default user interface for totems."],
 									get = function(info) return MOD.db.profile.hideBlizzTotems end,
 									set = function(info, value) MOD.db.profile.hideBlizzTotems = value; MOD:UpdateAllBarGroups() end,
 								},
 							},
 						},
-						--[[
-						HideTarget = {
-							type = "group", order = 30, name = L["Target"], inline = true,
-							args = {
-								HideUnitFrame = {
-									type = "toggle", order = 10, name = L["Unit Frame"],
-									desc = L["Hide default target unit frame."],
-									get = function(info) return MOD.db.profile.hideBlizzPlayer end,
-									set = function(info, value) MOD.db.profile.hideBlizzPlayer = value; MOD:UpdateAllBarGroups() end,
-								},
-								HideBuffs = {
-									type = "toggle", order = 5, name = L["Buffs and Debuffs"],
-									desc = L["Hide default user interface for target buffs and debuffs."],
-									get = function(info) return MOD.db.profile.hideBlizzBuffs end,
-									set = function(info, value) MOD.db.profile.hideBlizzBuffs = value; MOD:UpdateAllBarGroups() end,
-								},
-								HideCastBar = {
-									type = "toggle", order = 20, name = L["Cast Bar"],
-									desc = L["Hide default target cast bar."],
-									get = function(info) return MOD.db.profile.hideBlizzXP end,
-									set = function(info, value) MOD.db.profile.hideBlizzXP = value; MOD:UpdateAllBarGroups() end,
-								},
-							},
-						},
-						HideOther = {
-							type = "group", order = 40, name = L["Miscellaneous"], inline = true,
-							args = {
-								HideBuffs = {
-									type = "toggle", order = 5, name = L["Player Buffs and Debuffs"],
-									desc = L["Hide default user interface for buffs and debuffs."],
-									get = function(info) return MOD.db.profile.hideBlizzBuffs end,
-									set = function(info, value) MOD.db.profile.hideBlizzBuffs = value; MOD:UpdateAllBarGroups() end,
-								},
-								HidePlayer = {
-									type = "toggle", order = 10, name = L["Player Unit Frame"],
-									desc = L["Hide default player unit frame."],
-									get = function(info) return MOD.db.profile.hideBlizzPlayer end,
-									set = function(info, value) MOD.db.profile.hideBlizzPlayer = value; MOD:UpdateAllBarGroups() end,
-								},
-								HideXP = {
-									type = "toggle", order = 10, name = L["XP and Reputation"],
-									desc = L["Hide XP and reputation bars in the default user interface."],
-									get = function(info) return MOD.db.profile.hideBlizzXP end,
-									set = function(info, value) MOD.db.profile.hideBlizzXP = value; MOD:UpdateAllBarGroups() end,
-								},
-								HideAzerite = {
-									type = "toggle", order = 15, name = L["Azerite"],
-									desc = L["Hide) return MOD.db.profile.hideBlizzAzerite end,
-									set = function(info, value) MOD.db.profile.hideBlizzAzerite = value; MOD:UpdateAllBarGroups() end,
-								},
-							},
-						},
-						HideUnits = {
-							type = "group", order = 50, name = L["Unit Frames"], inline = true,
-							args = {
-								Pet = {
-									type = "toggle", order = 15, name = L["Pet"],
-									desc = L["Hide default pet unit frame."],
-									get = function(info) return MOD.db.profile.hideBlizzPet end,
-									set = function(info, value) MOD.db.profile.hideBlizzPet = value; MOD:UpdateAllBarGroups() end,
-								},
-								Target = {
-									type = "toggle", order = 20, name = L["Target"],
-									desc = L["Hide default target unit frame."],
-									get = function(info) return MOD.db.profile.hideBlizzTarget end,
-									set = function(info, value) MOD.db.profile.hideBlizzTarget = value; MOD:UpdateAllBarGroups() end,
-								},
-								Focus = {
-									type = "toggle", order = 25, name = L["Focus"],
-									desc = L["Hide default focus unit frame."],
-									get = function(info) return MOD.db.profile.hideBlizzFocus end,
-									set = function(info, value) MOD.db.profile.hideBlizzFocus = value; MOD:UpdateAllBarGroups() end,
-								},
-								Space1 = { type = "description", name = "", order = 30 },
-								TargetTarget = {
-									type = "toggle", order = 35, name = L["Target's Target"],
-									desc = L["Hide default target's target unit frame."],
-									get = function(info) return MOD.db.profile.hideBlizzTargetTarget end,
-									set = function(info, value) MOD.db.profile.hideBlizzTargetTarget = value; MOD:UpdateAllBarGroups() end,
-								},
-								FocusTarget = {
-									type = "toggle", order = 40, name = L["Focus's Target"],
-									desc = L["Hide default focus's target unit frame."],
-									get = function(info) return MOD.db.profile.hideBlizzFocusTarget end,
-									set = function(info, value) MOD.db.profile.hideBlizzFocusTarget = value; MOD:UpdateAllBarGroups() end,
-								},
-							},
-						},
-						]]--
 					},
 				},
 				DimensionGroup = {
@@ -3072,7 +2981,7 @@ MOD.OptionsTable = {
 				},
 				OmniCCGroup = {
 					type = "group", order = 40, name = L["OmniCC"], inline = true,
-					hidden = function(info) return not OmniCC end,
+					hidden = function(info) return not _G.OmniCC end,
 					args = {
 						Enable = {
 							type = "toggle", order = 10, name = L["Hide OmniCC"],
@@ -4932,7 +4841,7 @@ MOD.OptionsTable = {
 					validate = function(info, n) if not n or (n == "") then return L["Invalid name."] else return true end end,
 					confirm = function(info, value) return ConfirmNewBarGroup(value) end,
 					get = function(info)
-						bars.enter = bars.toggle; enterNewBarGroupType = false
+						bars.enter = bars.toggle
 						if bars.toggle then bars.toggle = false end
 						if not bars.enter then MOD:UpdateOptions() end
 						return false
@@ -4948,7 +4857,7 @@ MOD.OptionsTable = {
 					validate = function(info, n) if not n or (n == "") then return L["Invalid name."] else return true end end,
 					confirm = function(info, value) return ConfirmNewBarGroup(value) end,
 					get = function(info)
-						bars.enter = bars.toggle; enterNewBarGroupType = false
+						bars.enter = bars.toggle
 						if bars.toggle then bars.toggle = false end
 						if not bars.enter then MOD:UpdateOptions() end
 						return false
@@ -10176,7 +10085,7 @@ MOD.OptionsTable = {
 											set = function(info, value) SetTestField("Player Status", "checkLevel", value) end,
 										},
 										LevelRange = {
-											type = "range", order = 3, name = "", min = 1, max = 120, step = 1,
+											type = "range", order = 3, name = "", min = 1, max = 80, step = 1,
 											disabled = function(info) return IsTestFieldOff("Player Status", "checkLevel") end,
 											get = function(info) return GetTestField("Player Status", "level") end,
 											set = function(info, value) SetTestField("Player Status", "level", value) end,
@@ -10290,7 +10199,7 @@ MOD.OptionsTable = {
 											set = function(info, value) SetTestField("Player Status", "checkComboPoints", value) end,
 										},
 										ComboPointsRange = {
-											type = "range", order = 3, name = "", min = 1, max = 8, step = 1,
+											type = "range", order = 3, name = "", min = 1, max = 5, step = 1,
 											disabled = function(info) return IsTestFieldOff("Player Status", "checkComboPoints") end,
 											get = function(info) return GetTestField("Player Status", "minComboPoints") end,
 											set = function(info, value) SetTestField("Player Status", "minComboPoints", value) end,
@@ -12821,36 +12730,6 @@ MOD.OptionsTable = {
 										},
 									},
 								},
-								ChargesGroup = {
-									type = "group", order = 30, name = L["Charges"], inline = true,
-									args = {
-										CheckCharges = {
-											type = "toggle", order = 1, name = L["Enable"],
-											desc = L["If checked, test the number of charges on the spell."],
-											get = function(info) return IsTestFieldOn("Spell Ready", "checkCharges") end,
-											set = function(info, value) local v = Off if value then v = true end SetTestField("Spell Ready", "checkCharges", v) end,
-										},
-										ChargesValue = {
-											type = "range", order = 10, name = L["Charges"], min = 1, max = 10, step = 1,
-											desc = L["Enter value to compare with the number of charges."],
-											disabled = function(info) return IsTestFieldOff("Spell Ready", "checkCharges") end,
-											get = function(info) local d = GetTestField("Spell Ready", "charges"); if d then return d else return 1 end end,
-											set = function(info, value) SetTestField("Spell Ready", "charges", value) end,
-										},
-										CountMinMax = {
-											type = "select", order = 20, name = L["Comparison"],
-											get = function(info) if GetTestField("Spell Ready", "checkCharges") == true then return 1 else return 2 end end,
-											set = function(info, value) if value == 1 then SetTestField("Spell Ready", "checkCharges", true) else SetTestField("Spell Ready", "checkCharges", false) end end,
-											disabled = function(info) return IsTestFieldOff("Spell Ready", "checkCharges") end,
-											values = function(info)
-												local d = GetTestField("Spell Ready", "charges")
-												if not d then d = 1 end
-												return { "Less Than " .. d, d .. " Or More" }
-											end,
-											style = "dropdown",
-										},
-									},
-								},
 							},
 						},
 						SpellCastingGroup = {
@@ -12976,36 +12855,6 @@ MOD.OptionsTable = {
 											disabled = function(info) return IsTestFieldOff("Item Ready", "checkCount") end,
 											values = function(info)
 												local d = GetTestField("Item Ready", "count")
-												if not d then d = 1 end
-												return { "Less Than " .. d, d .. " Or More" }
-											end,
-											style = "dropdown",
-										},
-									},
-								},
-								ChargesGroup = {
-									type = "group", order = 30, name = L["Charges"], inline = true,
-									args = {
-										CheckCharges = {
-											type = "toggle", order = 1, name = L["Enable"],
-											desc = L["If checked, test the number of charges on the item(s)."],
-											get = function(info) return IsTestFieldOn("Item Ready", "checkCharges") end,
-											set = function(info, value) local v = Off if value then v = true end SetTestField("Item Ready", "checkCharges", v) end,
-										},
-										ChargesValue = {
-											type = "range", order = 10, name = L["Charges"], min = 1, max = 100, step = 1,
-											desc = L["Enter value to compare with the number of charges."],
-											disabled = function(info) return IsTestFieldOff("Item Ready", "checkCharges") end,
-											get = function(info) local d = GetTestField("Item Ready", "charges"); if d then return d else return 1 end end,
-											set = function(info, value) SetTestField("Item Ready", "charges", value) end,
-										},
-										CountMinMax = {
-											type = "select", order = 20, name = L["Comparison"],
-											get = function(info) if GetTestField("Item Ready", "checkCharges") == true then return 1 else return 2 end end,
-											set = function(info, value) if value == 1 then SetTestField("Item Ready", "checkCharges", true) else SetTestField("Item Ready", "checkCharges", false) end end,
-											disabled = function(info) return IsTestFieldOff("Item Ready", "checkCharges") end,
-											values = function(info)
-												local d = GetTestField("Item Ready", "charges")
 												if not d then d = 1 end
 												return { "Less Than " .. d, d .. " Or More" }
 											end,
@@ -13545,7 +13394,7 @@ MOD.barOptions = {
 				type = "input", order = 15, name = L["Associated Spell"],
 				desc = L["Enter a spell name (or numeric identifier, optionally preceded by # for a specific spell id)."],
 				get = function(info) return GetBarField(info, "notifySpell") end,
-				set = function(info, value) local value = ValidateSpellName(value, true); SetBarField(info, "notifySpell", value) end,
+				set = function(info, value) value = ValidateSpellName(value, true); SetBarField(info, "notifySpell", value) end,
 			},
 			spacer2 = { type = "description", name = "", order = 20, },
 			UseColor = {
@@ -13598,16 +13447,8 @@ MOD.barOptions = {
 				get = function(info) return not GetBarField(info, "readyNotUsable") end,
 				set = function(info, value) SetBarField(info, "readyNotUsable", not value); MOD:UpdateAllBarGroups() end,
 			},
-			EnableChargesTest = {
-				type = "toggle", order = 20, name = L["Charges"], width = "half",
-				desc = L["If checked, apply ready opacity when spell has at least one charge."],
-				hidden = function(info) return GetBarField(info, "barType") ~= "Cooldown" end,
-				disabled = function(info) return not GetBarField(info, "enableReady") end,
-				get = function(info) return GetBarField(info, "readyCharges") end,
-				set = function(info, value) SetBarField(info, "readyCharges", value); MOD:UpdateAllBarGroups() end,
-			},
 			ShowTime = {
-				type = "range", order = 25, name = L["Time"], min = 0, max = 60, step = 1,
+				type = "range", order = 20, name = L["Time"], min = 0, max = 60, step = 1,
 				desc = L["Set number of seconds to show the ready bar (0 for unlimited time)."],
 				disabled = function(info) return not GetBarField(info, "enableReady") end,
 				get = function(info) return GetBarField(info, "readyTime") or 0 end,
@@ -13650,7 +13491,7 @@ MOD.barOptions = {
 						type = "input", order = 5, name = L["Associated Spell"],
 						desc = L["Enter a spell name (or numeric identifier, optionally preceded by # for a specific spell id). This may be used by certain value types."],
 						get = function(info) return GetBarField(info, "spell") end,
-						set = function(info, value) local value = ValidateSpellName(value, true); SetBarField(info, "spell", value) end,
+						set = function(info, value) value = ValidateSpellName(value, true); SetBarField(info, "spell", value) end,
 					},
 					OptionalText = {
 						type = "input", order = 10, name = L["Optional Text"],

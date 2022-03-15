@@ -9,6 +9,7 @@
 <Script file="Libs\AceLocale-3.0\AceLocale-3.0.lua"/>
 <Script file="Libs\AceConsole-3.0\AceConsole-3.0.lua"/>
 <!--@end-no-lib-strip@-->
+<Include file="Libs\Backdrop\Backdrop.xml"/>
 <Include file="Libs\LibCompat-1.0\lib.xml"/>
 <Script file="Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua"/>
 <Script file="Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>

@@ -1,18 +1,18 @@
 -- Priest
 
 Raven.classConditions.PRIEST = {
-	["Purify (Disease)"] = {	
+	["Abolish Disease"] = {
 		tests = {
-			["Spell Ready"] = { enable = true, spell = 527, }, -- "Purify"
-			["Debuff Type"] = { enable = true, unit = "player", hasDebuff = "Disease", },
-		},	
-		associatedSpell = 527, -- "Purify"
+			["Spell Ready"] = {enable = true, spell = 552}, -- "Abolish Disease"
+			["Debuff Type"] = {enable = true, unit = "player", hasDebuff = "Disease"}
+		},
+		associatedSpell = 552 -- "Abolish Disease"
 	},
-	["Purify (Magic)"] = {	
+	["Dispel Magic"] = {
 		tests = {
-			["Spell Ready"] = { enable = true, spell = 527, }, -- "Purify"
-			["Debuff Type"] = { enable = true, unit = "player", hasDebuff = "Magic", },
-		},	
-		associatedSpell = 527, -- "Purify"
-	},
+			["Spell Ready"] = {enable = true, spell = 527}, -- "Dispel Magic"
+			["Debuff Type"] = {enable = true, unit = "player", hasDebuff = "Magic"}
+		},
+		associatedSpell = 527 -- "Dispel Magic"
+	}
 }

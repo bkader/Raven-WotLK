@@ -10,5 +10,6 @@
 <Script file="Presets\Shaman.lua"/>
 <Script file="Presets\Warlock.lua"/>
 <Script file="Presets\Warrior.lua"/>
+<Script file="Presets\Racials.lua"/>
 <Script file="Presets\General.lua"/>
 </Ui>

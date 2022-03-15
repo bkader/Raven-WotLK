@@ -112,11 +112,6 @@ L["No Pet"] = "無寵物"
 L["Level String"] = function(x, level) return string.format("等級 %s %d", x, level) end
 L["Health String"] = function(x, minHealth) return string.format("生命值 %s %d%%", x, minHealth) end
 L["Power String"] = function(x, minPower) return string.format("能量值 %s %d", x, minPower) end
-L["Holy Power String"] = function(x, minPower) return string.format("聖能 %s %d", x, minPower) end
-L["Shards String"] = function(x, minShards) return string.format("靈魂碎片 %s %d", x, minShards) end
-L["Eclipse String"] = function(x, power) return string.format("月蝕能量 %s %d", x, power) end
-L["Solar Eclipse"] = true
-L["Lunar Eclipse"] = true
 L["Combo Pts String"] = function(x, minComboPoints) return string.format("連擊點: %s %d", x, minComboPoints) end
 L["Stance String"] = function(stance) return string.format("姿態 = \"%s\"", stance) end
 L["Talent String"] = function(talent) return string.format("天賦 = \"%s\"", talent) end
@@ -240,7 +235,7 @@ L["If checked, Raven will not play sound effects."] = "Raven將不播放音效"
 L["Minimap Icon"] = "小地圖圖標"
 L["If checked, Raven will add an icon to the minimap."] ="顯示小地圖圖標"
 L["Standard Bar Groups"] = "默認的計時條組"
-L["Anchor description"] = "Raven 可以讓你顯示buff\debuff\冷卻的圖標和監視條 " ..
+L["Anchor description"] = "Raven 可以讓你顯示buff\"debuff\"冷卻的圖標和監視條 " ..
 	'你可以在 "計時條組" 標簽下進行設置,以配置一個個性化的界面. ' ..
 	"想要開始的話,很簡單,用列出默認的計時條組開始下手吧. " ..
 	'選擇你喜歡的計時條組,然後按"以條創建"或"以圖標創建". ' ..
@@ -280,7 +275,7 @@ L["Delete the selected bar groups."] = "刪除選定的計時條組"
 L["Delete standard string"] = "刪除計時條組\n確定刪除選定的計時條組?"
 L["Bar Group Anchors"] = "計時條組錨點"
 L["Bar group anchor string"] = "計時條組錨點決定將在哪裏顯示監視條 " ..
-	"錨點的提示將列出有幫助的快捷方式(例如:在錨點上改變監視條的增長方向\測試等). " ..
+	"錨點的提示將列出有幫助的快捷方式(例如:在錨點上改變監視條的增長方向測試等). " ..
 	"你可以點擊左鍵以拖動錨點。 " ..
 	"當你對位置滿意時你可以點擊右鍵鎖定. " ..
 	'鎖定的錨點將被隱藏--點擊 "解鎖全部錨點"按鈕以顯示他們.\n'
@@ -291,7 +286,7 @@ L["Unlock and show the anchors for all bar groups."] = "解鎖並顯示全部計
 
 -- Defaults tab
 L["Defaults"] = "默認"
-L["Defaults string"] = "在計時條組裏的監視條擁有例如尺寸\字體和紋理的外觀選項 " ..
+L["Defaults string"] = "在計時條組裏的監視條擁有例如尺寸字體和紋理的外觀選項 " ..
 	"您可以在這個選項界面中調整這些選項的默認值. " ..
 	"這些設置將被所有的配置文件所共同采用，以便您使用多個角色.\n"
 L["Bar Configurations"] = "條 配置"
@@ -1084,17 +1079,6 @@ L["If checked, test the player's health."] ="測試:玩家生命"
 L["If checked, player's health must be at least this percentage, otherwise must be less."] = "勾選,則玩家生命必須高於這個百分比,否則必須低於"
 L["If checked, test the player's power (i.e., mana, rage, energy, focus, runic power)."] = "測試:玩家法力值"
 L["If checked, player's power must be at least this percentage, otherwise must be less."] = "勾選,則玩家法力值必須高於這個百分比,否則必須低於"
-L["If checked, test the player's holy power."] = "測試:玩家的聖能"
-L["If checked, player's holy power must be at least this many charges, otherwise must be less."] = "勾選,則玩家聖能必須高於這個數字,否則必須低於"
-L["If checked, test the player's number of soul shards."] = "測試:玩家的靈魂碎片"
-L["If checked, player's holy power must be at least this many charges, otherwise must be less."] ="勾選,則玩家靈魂碎片必須高於這個數字,否則必須低於"
-L["If checked, test the player's eclipse power. You can set power level (-100 to -1 for lunar power, 1 to 100 for solar power) and the comparison to use (either less or greater than the power level)."] = "測試：玩家月蝕能量.你可以設置基本能量進行測試"
-L["If checked, player's eclipse power must be at least this level, otherwise must be less."] ="勾選,則玩家的月蝕能量必須高於這個數字,否則必須低於"
-L["If checked, test the player's eclipse status. You can test current eclipse direction (toward sun or moon) and whether lunar or solar eclipse is active."] = "測試:玩家的月蝕狀態"
-L["If checked, player must be in Solar Eclipse."] = "勾選,則玩家必須在日蝕"
-L["If checked, player must be in Lunar Eclipse."] = "勾選,則玩家必須在日蝕"
-L["If checked, eclipse direction must be going toward the sun."] = "勾選,則玩家的月蝕能量必須正在向日蝕方向移動"
-L["If checked, eclipse direction must be going toward the moon."] ="勾選,則玩家的日蝕能量必須正在向月蝕方向移動"
 L["Available"] = "可用"
 L["If checked, test the player's rune status."] ="測試:玩家符文"
 L["Any"] = "任意"
@@ -1121,15 +1105,6 @@ L["Enter name of specific totem to check is active."] = "輸入要監視激活�
 L["Health"] = "生命"
 L["Power"] = "法力"
 L["Minimum"] = "最小"
-L["Holy Power"] = "聖能"
-L["Soul Shards"] = "靈魂碎片"
-L["Eclipse Power"] = "月蝕能量"
-L["Eclipse State"] = "月蝕狀態"
-L["Eclipse"] = "蝕"
-L["Solar"] = "日"
-L["Lunar"] = "月"
-L[">> Sun"] = ">>日"
-L[">> Moon"] = ">>月"
 L["Combo Points"] = "連擊點"
 L["If checked, test if the player has a mainhand weapon equipped with at least the specified item level."] = "勾選,測試玩家的主手武器物品等級必須高於設定值"
 L["If checked, test if the player has an offhand weapon equipped with at least the specified item level."] ="勾選,測試玩家的副手武器物品等級必須高於設定值"
@@ -1353,9 +1328,6 @@ L["If checked, item must be ready."] = "如果勾選, 物品必須可以使用."
 L["If checked, item must not be ready."] = "如果勾選, 物品必須不可使用."
 L["If checked, test item count."] = "如果勾選, 檢測物品數量."
 L["Enter value to compare with item count."] = "輸入物品數量參考值."
-L["Charges"] = "費用"
-L["If checked, test the number of charges on the item(s)."] = "如果勾選, 測試物品所需費用."
-L["Enter value to compare with the number of charges."] = "輸入物品所需費用的參考值."
 
 -- Conditions > Tests > Result
 L["Dependencies"] = "依賴關系"
@@ -1570,15 +1542,15 @@ L["Enter class required for internal cooldown (leave blank if all classes can tr
 
 ------- New Entries September 6, 2011
 L["If checked, hide count overlay text on icon."] = "如果勾選，則隱藏覆蓋圖標層數文字"
-L["If checked, set \"Left\" alignment for icon text."] ="如果勾選，設置文本\"左對齊\"" 
-L["If checked, set \"Center\" alignment for icon text."] = "如果勾選，設置文本\"居中對齊\"" 
-L["If checked, set \"Right\" alignment for icon text."] = "如果勾選，設置文本\"右對齊\"" 
-------- New Entries October 1, 2011 
-L["Castable"] = "可施放的" 
-L['Include buffs that the player can cast.'] = "包括玩家施放的Buff" 
-L['Include debuffs that the player can cast.'] = "包括玩家施放的Debuff" 
-L["NPC"] = true 
-L['Include buffs cast by an NPC (note: only valid while caster is selected, such as when checking target of target).'] ="包括NPC施放的Buff（注：只有當施法者被選中時有效，比如監視目標的目標）" 
-L['Include debuffs cast by an NPC (note: only valid while caster is selected, such as when checking target of target).'] ="包括NPC施放的DeBuff（注：只有當施法者被選中時有效，比如監視目標的目標）" 
-L['Include buffs cast by a vehicle (note: only valid while caster is selected, such as when checking target of target).'] = "包括載具施放的Buff（注：只有當施法者被選中時有效，比如監視目標的目標）" 
-L['Include debuffs cast by a vehicle (note: only valid while caster is selected, such as when checking target of target).'] = "包括載具施放的DeBUFF（注：只有當施法者被選中時有效，比如監視目標的目標）" 
+L["If checked, set \"Left\" alignment for icon text."] ="如果勾選，設置文本\"左對齊\""
+L["If checked, set \"Center\" alignment for icon text."] = "如果勾選，設置文本\"居中對齊\""
+L["If checked, set \"Right\" alignment for icon text."] = "如果勾選，設置文本\"右對齊\""
+------- New Entries October 1, 2011
+L["Castable"] = "可施放的"
+L['Include buffs that the player can cast.'] = "包括玩家施放的Buff"
+L['Include debuffs that the player can cast.'] = "包括玩家施放的Debuff"
+L["NPC"] = true
+L['Include buffs cast by an NPC (note: only valid while caster is selected, such as when checking target of target).'] ="包括NPC施放的Buff（注：只有當施法者被選中時有效，比如監視目標的目標）"
+L['Include debuffs cast by an NPC (note: only valid while caster is selected, such as when checking target of target).'] ="包括NPC施放的DeBuff（注：只有當施法者被選中時有效，比如監視目標的目標）"
+L['Include buffs cast by a vehicle (note: only valid while caster is selected, such as when checking target of target).'] = "包括載具施放的Buff（注：只有當施法者被選中時有效，比如監視目標的目標）"
+L['Include debuffs cast by a vehicle (note: only valid while caster is selected, such as when checking target of target).'] = "包括載具施放的DeBUFF（注：只有當施法者被選中時有效，比如監視目標的目標）"

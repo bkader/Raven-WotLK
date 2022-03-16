@@ -2340,7 +2340,7 @@ function MOD:CheckCooldown(name)
 		if string.find(name, "^#%d+") then
 			id = tonumber(string.sub(name, 2))
 		else
-			id = tonumber(name)
+			id = GetSpellID(name)
 		end
 		if id then
 			name = GetSpellInfo(id)
@@ -2362,13 +2362,13 @@ function MOD:CheckSpellStatus(name, usable, ready)
 		if string.find(name, "^#%d+") then
 			id = tonumber(string.sub(name, 2))
 		else
-			id = tonumber(name)
+			id = GetSpellID(name)
 		end
 		if id then
 			name = GetSpellInfo(id)
 		end -- may need to convert from spell id to name
 		if name and name ~= "" then
-			local spellID = MOD.bookSpells[name]
+			local spellID = MOD.bookSpells[name] or id
 			if spellID then -- spell is known by the player
 				if usable then
 					result = not IsPassiveSpell(spellID) and IsUsableSpell(name) -- check non-passive and has resources

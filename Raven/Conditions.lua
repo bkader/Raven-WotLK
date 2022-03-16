@@ -530,6 +530,7 @@ local function CheckSpellReady(spell, unit, rangeCheck, usable)
 			return false
 		end
 	end
+
 	if usable and not MOD:CheckSpellStatus(spell, true) then
 		return false
 	end -- checks player has learned the spell, has mana and/or reagents, and reactive conditions are met
@@ -1592,7 +1593,7 @@ function MOD:UpdateConditions()
 	else
 		stat.lunarPower = 0
 	end
-	stat.combo = GetComboPoints("player") or 0
+	stat.combo = GetComboPoints("player", "target") or 0
 	stat.stance = GetStance()
 	stat.noPet = not UnitExists("pet")
 	if not stat.noPet then

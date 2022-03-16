@@ -423,6 +423,13 @@ end
 
 -- Add a shine effect over a bar's icon
 -- If color is set then apply it to the animation
+local function ShineEffect_OnFinished(self)
+	local parent = self:GetParent()
+	if parent and parent:IsShown() then
+		parent:Hide()
+	end
+end
+
 local function ShineEffect(bar, color)
 	local a = bar.shineEffect -- get an animation if one has already been allocated for this bar
 	if not a then -- allocate an animation if necessary
@@ -465,7 +472,6 @@ local function ShineEffect(bar, color)
 		PSetSize(a.frame, w, h)
 		PCSetPoint(a.frame, "CENTER", bar.icon, "CENTER", 0, 0)
 		a.texture:SetAllPoints(a.frame)
-		a.frame:SetAlpha(0)
 		a.frame:Show()
 		a.texture:Show()
 		bar.shineEffect = a
@@ -478,7 +484,11 @@ local function ShineEffect(bar, color)
 			b = color.b
 		end
 		a.texture:SetVertexColor(r, g, b, 1) -- add color to the texture
+		if not a.anim:GetScript("OnFinished") then
+			a.anim:SetScript("OnFinished", ShineEffect_OnFinished)
+		end
 		a.anim:Stop()
+		a.frame:Show()
 		a.anim:Play()
 	end
 end
@@ -508,11 +518,11 @@ local function GlowEffect(bar, color)
 			a = {} -- initialize a new table for this glow effect
 			a.frame = CreateFrame("Frame", nil, UIParent)
 			a.texture = a.frame:CreateTexture(nil, "BACKGROUND") -- texture to be animated
-			a.texture:SetTexture("Interface\\SpellActivationOverlay\\IconAlert")
+			a.texture:SetTexture("Interface\\AddOns\\Raven\\Textures\\IconAlert")
 			a.texture:SetTexCoord(0.00781250, 0.50781250, 0.53515625, 0.78515625)
 			a.texture:SetBlendMode("ADD")
 			a.circle = a.frame:CreateTexture(nil, "BACKGROUND") -- alternative circle texture
-			a.circle:SetTexture("Interface\\Common\\GoldRing")
+			a.circle:SetTexture("Interface\\AddOns\\Raven\\Textures\\GoldRing")
 			a.circle:SetBlendMode("ADD")
 		end
 		a.frame:ClearAllPoints()

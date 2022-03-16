@@ -4,7 +4,7 @@
 -- @author: Kader B (https://github.com/bkader/LibCompat-1.0)
 --
 
-local MAJOR, MINOR = "LibCompat-1.0", 29
+local MAJOR, MINOR = "LibCompat-1.0", 30
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -1182,7 +1182,7 @@ do
 		else
 			id, role = GetInspectSpecialization("player"), GetSpecializationRole("player")
 		end
-		return id, name, nil, icon, background, role
+		return id, name, "NaN", icon, background, role
 	end
 
 	local LT = LibStub("LibBabble-TalentTree-3.0"):GetLookupTable()
@@ -1336,7 +1336,7 @@ do
 			class = "WARRIOR"
 		end
 
-		return id, name, "No Description", icon, nil, role, class
+		return id, name, "NaN", icon, nil, role, class
 	end
 
 	local UnitGroupRolesAssigned = UnitGroupRolesAssigned

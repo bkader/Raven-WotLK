@@ -242,6 +242,7 @@ end
 
 -- Initialize cooldown info from spellbook, should be called whenever spell book changes
 -- This builds a cache of spells with cooldowns and initializes info related to spell school lockouts
+local heroism = MOD.myFaction == "Alliance" and 32182 or 2825
 function MOD:SetCooldownDefaults()
 	local cds = MOD.cooldownSpells -- table of spells to be checked for cooldowns, entries are spellID->baseCooldown
 	local cpet = MOD.petSpells -- table of pets spells to be checked for cooldowns, entries are spellID->baseCooldown
@@ -272,16 +273,663 @@ function MOD:SetCooldownDefaults()
 		end
 	end
 
-	-- Add special spells which either share spellbook entries or show up dynamically
-	if MOD.myClass == "HUNTER" then
+	if MOD.myClass == "DEATHKNIGHT" then
+		local name = getSpellInfo(42650)
+		cds[42650] = 600 -- Army of the Dead
+		bst[name] = 42650
+
+		name = getSpellInfo(45529)
+		cds[45529] = 60 -- Blood Tap
+		bst[name] = 45529
+
+		name = getSpellInfo(47476)
+		cds[47476] = 120 -- Strangulate
+		bst[name] = 47476
+
+		name = getSpellInfo(47528)
+		cds[47528] = 10 -- Mind Freeze
+		bst[name] = 47528
+
+		name = getSpellInfo(47568)
+		cds[47568] = 300 -- ERW
+		bst[name] = 47568
+
+		name = getSpellInfo(48707)
+		cds[48707] = 45 -- Anti-Magic Shell
+		bst[name] = 48707
+
+		name = getSpellInfo(48792)
+		cds[48792] = 120 -- Icebound Fortitude
+		bst[name] = 48792
+
+		name = getSpellInfo(48982)
+		cds[48982] = 30 -- Rune Tap
+		bst[name] = 48982
+
+		name = getSpellInfo(49005)
+		cds[49005] = 180 -- Mark of Blood
+		bst[name] = 49005
+
+		name = getSpellInfo(49016)
+		cds[49016] = 180 -- Hysteria
+		bst[name] = 49016
+
+		name = getSpellInfo(49028)
+		cds[49028] = 90 -- Dancing Rune Weapon
+		bst[name] = 49028
+
+		name = getSpellInfo(49039)
+		cds[49039] = 120 -- Lichborne
+		bst[name] = 49039
+
+		name = getSpellInfo(49206)
+		cds[49206] = 180 -- Summon Gargoyle
+		bst[name] = 49206
+
+		name = getSpellInfo(49222)
+		cds[49222] = 60 -- Bone Shield
+		bst[name] = 49222
+
+		name = getSpellInfo(49576)
+		cds[49576] = 35 -- Death Grip
+		bst[name] = 49576
+
+		name = getSpellInfo(51052)
+		cds[51052] = 120 -- Anti-magic Zone
+		bst[name] = 51052
+
+		name = getSpellInfo(51271)
+		cds[51271] = 60 -- Unbreakable Armor
+		bst[name] = 51271
+
+		name = getSpellInfo(55233)
+		cds[55233] = 60 -- Vampiric Blood
+		bst[name] = 55233
+
+		name = getSpellInfo(56222)
+		cds[56222] = 8 -- Dark Command
+		bst[name] = 56222
+
+		name = getSpellInfo(61999)
+		cds[61999] = 600 -- Raise Ally
+		bst[name] = 61999
+
+		name = getSpellInfo(70654)
+		cds[70654] = 60 -- Blood Armor (Tank 4 Set)
+		bst[name] = 70654
+
+		name = getSpellInfo(48743)
+		cds[48743] = 120 -- Death Pact
+		bst[name] = 48743
+	elseif MOD.myClass == "DRUID" then
+		local name = getSpellInfo(16857)
+		cds[16857] = 6 -- Faerie Fire (Feral)
+		bst[name] = 16857
+
+		name = getSpellInfo(17116)
+		cds[17116] = 180 -- Nature's Swiftness
+		bst[name] = 17116
+
+		name = getSpellInfo(18562)
+		cds[18562] = 15 -- Swiftmend
+		bst[name] = 18562
+
+		name = getSpellInfo(22812)
+		cds[22812] = 60 -- Barkskin
+		bst[name] = 22812
+
+		name = getSpellInfo(22842)
+		cds[22842] = 180 -- Frenzied Regeneration
+		bst[name] = 22842
+
+		name = getSpellInfo(29166)
+		cds[29166] = 180 -- Innervate
+		bst[name] = 29166
+
+		name = getSpellInfo(33357)
+		cds[33357] = 180 -- Dash
+		bst[name] = 33357
+
+		name = getSpellInfo(33831)
+		cds[33831] = 180 -- Force of Nature
+		bst[name] = 33831
+
+		name = getSpellInfo(48447)
+		cds[48447] = 480 -- Tranquility
+		bst[name] = 48447
+
+		name = getSpellInfo(48477)
+		cds[48477] = 600 -- Rebirth
+		bst[name] = 48477
+
+		name = getSpellInfo(50334)
+		cds[50334] = 180 -- Berserk
+		bst[name] = 50334
+
+		name = getSpellInfo(5209)
+		cds[5209] = 180 -- Challenging Roar
+		bst[name] = 5209
+
+		name = getSpellInfo(5229)
+		cds[5229] = 60 -- Enrage
+		bst[name] = 5229
+
+		name = getSpellInfo(53201)
+		cds[53201] = 60 -- Starfall
+		bst[name] = 53201
+
+		name = getSpellInfo(53227)
+		cds[53227] = 20 -- Typhoon
+		bst[name] = 53227
+
+		name = getSpellInfo(61336)
+		cds[61336] = 180 -- Survival Instincts
+		bst[name] = 61336
+
+		name = getSpellInfo(6795)
+		cds[6795] = 8 -- Growl
+		bst[name] = 6795
+
+		name = getSpellInfo(8983)
+		cds[8983] = 30 -- Bash
+		bst[name] = 8983
+	elseif MOD.myClass == "HUNTER" then
 		local name = getSpellInfo(136) -- get localized name for mend pet
 		cds[136] = 10
 		bst[name] = 136 -- shares spellbook entry with Revive Pet
-	end
-	if MOD.myClass == "PRIEST" then
+
+		name = getSpellInfo(13809)
+		cds[13809] = 30 -- Frost Trap
+		bst[name] = 13809
+
+		name = getSpellInfo(19263)
+		cds[19263] = 90 -- Deterrence
+		bst[name] = 19263
+
+		name = getSpellInfo(19574)
+		cds[19574] = 120 -- Bestial Wrath
+		bst[name] = 19574
+
+		name = getSpellInfo(19801)
+		cds[19801] = 8 -- Tranquilizing Shot
+		bst[name] = 19801
+
+		name = getSpellInfo(23989)
+		cds[23989] = 180 -- Readiness
+		bst[name] = 23989
+
+		name = getSpellInfo(3045)
+		cds[3045] = 180 -- Rapid Fire
+		bst[name] = 3045
+
+		name = getSpellInfo(34477)
+		cds[34477] = 30 -- Misdirection
+		bst[name] = 34477
+
+		name = getSpellInfo(34490)
+		cds[34490] = 30 -- Silencing Shot
+		bst[name] = 34490
+
+		name = getSpellInfo(34600)
+		cds[34600] = 30 -- Snake Trap
+		bst[name] = 34600
+
+		name = getSpellInfo(49067)
+		cds[49067] = 30 -- Explosive Trap
+		bst[name] = 49067
+
+		name = getSpellInfo(60192)
+		cds[60192] = 30 -- Freezing Arrow
+		bst[name] = 60192
+
+		name = getSpellInfo(781)
+		cds[781] = 25 -- Disengage
+		bst[name] = 781
+
+		name = getSpellInfo(5384)
+		cds[5384] = 30 -- Feign Death
+		bst[name] = 5384
+
+	elseif MOD.myClass == "MAGE" then
+		local name = getSpellInfo(11958)
+		cds[11958] = 480 -- Cold Snap
+		bst[name] = 11958
+
+		name = getSpellInfo(12051)
+		cds[12051] = 240 -- Evocation
+		bst[name] = 12051
+
+		name = getSpellInfo(1953)
+		cds[1953] = 15 -- Blink
+		bst[name] = 1953
+
+		name = getSpellInfo(2139)
+		cds[2139] = 24 -- Counterspell
+		bst[name] = 2139
+
+		name = getSpellInfo(31687)
+		cds[31687] = 180 -- Summon Water Elemental
+		bst[name] = 31687
+
+		name = getSpellInfo(45438)
+		cds[45438] = 300 -- Ice Block
+		bst[name] = 45438
+
+		name = getSpellInfo(55342)
+		cds[55342] = 180 -- Mirror Image
+		bst[name] = 55342
+
+		name = getSpellInfo(66)
+		cds[66] = 180 -- Invisibility
+		bst[name] = 66
+	elseif MOD.myClass == "PALADIN" then
+
+		local name = getSpellInfo(10278)
+		cds[10278] = 300 -- Hand of Protection
+		bst[name] = 10278
+
+		name = getSpellInfo(10308)
+		cds[10308] = 60 -- Hammer of Justice
+		bst[name] = 10308
+
+		name = getSpellInfo(1038)
+		cds[1038] = 120 -- Hand of Salvation
+		bst[name] = 1038
+
+		name = getSpellInfo(1044)
+		cds[1044] = 25 -- Hand of Freedom
+		bst[name] = 1044
+
+		name = getSpellInfo(19752)
+		cds[19752] = 600 -- Divine Intervention
+		bst[name] = 19752
+
+		name = getSpellInfo(20066)
+		cds[20066] = 60 -- Repentance
+		bst[name] = 20066
+
+		name = getSpellInfo(20216)
+		cds[20216] = 120 -- Divine Favor
+		bst[name] = 20216
+
+		name = getSpellInfo(31789)
+		cds[31789] = 8 -- Righteous Defense
+		bst[name] = 31789
+
+		name = getSpellInfo(31821)
+		cds[31821] = 120 -- Aura Mastery
+		bst[name] = 31821
+
+		name = getSpellInfo(31842)
+		cds[31842] = 180 -- Divine Illumination
+		bst[name] = 31842
+
+		name = getSpellInfo(31850)
+		cds[31850] = 180 -- Ardent Defender
+		bst[name] = 31850
+
+		name = getSpellInfo(31884)
+		cds[31884] = 120 -- Avenging Wrath
+		bst[name] = 31884
+
+		name = getSpellInfo(48788)
+		cds[48788] = 1200 -- Lay on Hands
+		bst[name] = 48788
+
+		name = getSpellInfo(48817)
+		cds[48817] = 30 -- Holy Wrath
+		bst[name] = 48817
+
+		name = getSpellInfo(498)
+		cds[498] = 60 -- Divine Protection
+		bst[name] = 498
+
+		name = getSpellInfo(53601)
+		cds[53601] = 60 -- Sacred Shield
+		bst[name] = 53601
+
+		name = getSpellInfo(54428)
+		cds[54428] = 60 -- Divine Plea
+		bst[name] = 54428
+
+		name = getSpellInfo(62124)
+		cds[62124] = 8 -- Hand of Reckoning
+		bst[name] = 62124
+
+		name = getSpellInfo(64205)
+		cds[64205] = 120 -- Divine Sacrifice
+		bst[name] = 64205
+
+		name = getSpellInfo(642)
+		cds[642] = 300 -- Divine Shield
+		bst[name] = 642
+
+		name = getSpellInfo(66233)
+		cds[66233] = 120 -- Ardent Defender
+		bst[name] = 66233
+
+		name = getSpellInfo(6940)
+		cds[6940] = 120 -- Hand of Sacrifice
+		bst[name] = 6940
+
+		name = getSpellInfo(70940)
+		cds[70940] = 120 -- Divine Guardian
+		bst[name] = 70940
+	elseif MOD.myClass == "PRIEST" then
 		local name = getSpellInfo(17) -- get localized name for power word: shield
 		cds[17] = 10
 		bst[name] = 17 -- has a cooldown in shadow spec
+
+		name = getSpellInfo(10060)
+		cds[10060] = 96 -- Powers Infusion
+		bst[name] = 10060
+
+		name = getSpellInfo(10890)
+		cds[10890] = 30 -- Psychic Scream
+		bst[name] = 10890
+
+		name = getSpellInfo(15487)
+		cds[15487] = 45 -- Silence
+		bst[name] = 15487
+
+		name = getSpellInfo(33206)
+		cds[33206] = 180 -- Pain Suppression
+		bst[name] = 33206
+
+		name = getSpellInfo(34433)
+		cds[34433] = 300 -- Shadowfiend
+		bst[name] = 34433
+
+		name = getSpellInfo(47585)
+		cds[47585] = 120 -- Dispersion
+		bst[name] = 47585
+
+		name = getSpellInfo(47788)
+		cds[47788] = 180 -- Guardian Spirit
+		bst[name] = 47788
+
+		name = getSpellInfo(48113)
+		cds[48113] = 10 -- Prayer of Mending
+		bst[name] = 48113
+
+		name = getSpellInfo(586)
+		cds[586] = 30 -- Fade
+		bst[name] = 586
+
+		name = getSpellInfo(6346)
+		cds[6346] = 180 -- Fear Ward
+		bst[name] = 6346
+
+		name = getSpellInfo(64044)
+		cds[64044] = 120 -- Psychic Horror
+		bst[name] = 64044
+
+		name = getSpellInfo(64843)
+		cds[64843] = 480 -- Divine Hymn
+		bst[name] = 64843
+
+		name = getSpellInfo(64901)
+		cds[64901] = 360 -- Hymn of Hope
+		bst[name] = 64901
+
+		name = getSpellInfo(724)
+		cds[724] = 180 -- Lightwell
+		bst[name] = 724
+
+		name = getSpellInfo(8122)
+		cds[8122] = 30 -- Psychic Scream
+		bst[name] = 8122
+	elseif MOD.myClass == "ROGUE" then
+		local name = getSpellInfo(11305)
+		cds[11305] = 40 -- Sprint
+		bst[name] = 11305
+
+		name = getSpellInfo(13750)
+		cds[13750] = 80 -- Adrenaline Rush
+		bst[name] = 13750
+
+		name = getSpellInfo(13877)
+		cds[13877] = 20 -- Blade Flurry
+		bst[name] = 13877
+
+		name = getSpellInfo(14185)
+		cds[14185] = 300 -- Preparation
+		bst[name] = 14185
+
+		name = getSpellInfo(1725)
+		cds[1725] = 30 -- Distract
+		bst[name] = 1725
+
+		name = getSpellInfo(1766)
+		cds[1766] = 10 -- Kick
+		bst[name] = 1766
+
+		name = getSpellInfo(1856)
+		cds[1856] = 180 -- Vanish
+		bst[name] = 1856
+
+		name = getSpellInfo(2094)
+		cds[2094] = 180 -- Blind
+		bst[name] = 2094
+
+		name = getSpellInfo(26669)
+		cds[26669] = 50 -- Evasion
+		bst[name] = 26669
+
+		name = getSpellInfo(26889)
+		cds[26889] = 20 -- Vanish
+		bst[name] = 26889
+
+		name = getSpellInfo(31224)
+		cds[31224] = 90 -- Cloak of Shadows
+		bst[name] = 31224
+
+		name = getSpellInfo(48659)
+		cds[48659] = 10 -- Feint
+		bst[name] = 48659
+
+		name = getSpellInfo(51690)
+		cds[51690] = 20 -- Killing Spree
+		bst[name] = 51690
+
+		name = getSpellInfo(51722)
+		cds[51722] = 60 -- Dismantle
+		bst[name] = 51722
+
+		name = getSpellInfo(5277)
+		cds[5277] = 180 -- Evasion
+		bst[name] = 5277
+
+		name = getSpellInfo(57934)
+		cds[57934] = 30 -- Tricks of the Trade
+		bst[name] = 57934
+
+		name = getSpellInfo(8643)
+		cds[8643] = 20 -- Kidney Shot
+		bst[name] = 8643
+
+	elseif MOD.myClass == "SHAMAN" then
+		name = getSpellInfo(16166)
+		cds[16166] = 180 -- Elemental Mastery
+		bst[name] = 16166
+
+		name = getSpellInfo(16188)
+		cds[16188] = 120 -- Nature's Swiftness
+		bst[name] = 16188
+
+		name = getSpellInfo(16190)
+		cds[16190] = 300 -- Mana Tide Totem
+		bst[name] = 16190
+
+		name = getSpellInfo(20608)
+		cds[20608] = 1800 -- Reincarnation
+		bst[name] = 20608
+
+		name = getSpellInfo(2062)
+		cds[2062] = 600 -- Earth Elemental Totem
+		bst[name] = 2062
+
+		name = getSpellInfo(21169)
+		cds[21169] = 1800 -- Reincarnation
+		bst[name] = 21169
+
+		name = getSpellInfo(2894)
+		cds[2894] = 600 -- Fire Elemental Totem
+		bst[name] = 2894
+
+		name = getSpellInfo(51514)
+		cds[51514] = 45 -- Hex
+		bst[name] = 51514
+
+		name = getSpellInfo(51533)
+		cds[51533] = 180 -- Feral Spirit
+		bst[name] = 51533
+
+		name = getSpellInfo(57994)
+		cds[57994] = 6 -- Wind Shear
+		bst[name] = 57994
+
+		name = getSpellInfo(59159)
+		cds[59159] = 35 -- Thunderstorm
+		bst[name] = 59159
+
+		name = getSpellInfo(30823)
+		cds[30823] = 60 -- Shamanistic Rage
+		bst[name] = 30823
+
+		name = getSpellInfo(heroism)
+		cds[heroism] = 300 -- Bloodlust/Heroism
+		bst[name] = heroism
+
+	elseif MOD.myClass == "WARLOCK" then
+		name = getSpellInfo(1122)
+		cds[1122] = 600 -- Summon Infernal
+		bst[name] = 1122
+
+		name = getSpellInfo(18540)
+		cds[18540] = 600 -- Summon Doomguard
+		bst[name] = 18540
+
+		name = getSpellInfo(29858)
+		cds[29858] = 180 -- Soulshatter
+		bst[name] = 29858
+
+		name = getSpellInfo(29893)
+		cds[29893] = 300 -- Ritual of Souls
+		bst[name] = 29893
+
+		name = getSpellInfo(47241)
+		cds[47241] = 126 -- Metamorphosis
+		bst[name] = 47241
+
+		name = getSpellInfo(47883)
+		cds[47883] = 900 -- Soulstone Resurrection
+		bst[name] = 47883
+
+		name = getSpellInfo(48020)
+		cds[48020] = 30 -- Demonic Circle: Teleport
+		bst[name] = 48020
+
+		name = getSpellInfo(59672)
+		cds[59672] = 180 -- Metamorphosis
+		bst[name] = 59672
+
+		name = getSpellInfo(6203)
+		cds[6203] = 1800 -- Soulstone XXX needs testing
+		bst[name] = 6203
+
+		name = getSpellInfo(698)
+		cds[698] = 120 -- Ritual of Summoning
+		bst[name] = 698
+
+		name = getSpellInfo(47891)
+		cds[47891] = 30 -- Shadow Ward
+		bst[name] = 47891
+
+	elseif MOD.myClass == "WARRIOR" then
+		name = getSpellInfo(1161)
+		cds[1161] = 180 -- Challenging Shout
+		bst[name] = 1161
+
+		name = getSpellInfo(12292)
+		cds[12292] = 121 -- Death Wish
+		bst[name] = 12292
+
+		name = getSpellInfo(12323)
+		cds[12323] = 5 -- Piercing Howl
+		bst[name] = 12323
+
+		name = getSpellInfo(12809)
+		cds[12809] = 30 -- Concussion Blow
+		bst[name] = 12809
+
+		name = getSpellInfo(12975)
+		cds[12975] = 180 -- Last Stand
+		bst[name] = 12975
+
+		name = getSpellInfo(1680)
+		cds[1680] = 8 -- Whirlwind
+		bst[name] = 1680
+
+		name = getSpellInfo(1719)
+		cds[1719] = 200 -- Recklessness
+		bst[name] = 1719
+
+		name = getSpellInfo(23881)
+		cds[23881] = 4 -- Bloodthirst
+		bst[name] = 23881
+
+		name = getSpellInfo(2565)
+		cds[2565] = 60 -- Shield Block
+		bst[name] = 2565
+
+		name = getSpellInfo(3411)
+		cds[3411] = 30 -- Intervene
+		bst[name] = 3411
+
+		name = getSpellInfo(355)
+		cds[355] = 8 -- Taunt
+		bst[name] = 355
+
+		name = getSpellInfo(46924)
+		cds[46924] = 75 -- Bladestorm
+		bst[name] = 46924
+
+		name = getSpellInfo(5246)
+		cds[5246] = 120 -- Intimidating Shout
+		bst[name] = 5246
+
+		name = getSpellInfo(55694)
+		cds[55694] = 180 -- Enraged Regeneration
+		bst[name] = 55694
+
+		name = getSpellInfo(60970)
+		cds[60970] = 45 -- Heroic Fury
+		bst[name] = 60970
+
+		name = getSpellInfo(64382)
+		cds[64382] = 300 -- Shattering Throw
+		bst[name] = 64382
+
+		name = getSpellInfo(6552)
+		cds[6552] = 10 -- Pummel
+		bst[name] = 6552
+
+		name = getSpellInfo(676)
+		cds[676] = 60 -- Disarm
+		bst[name] = 676
+
+		name = getSpellInfo(70845)
+		cds[70845] = 60 -- Stoicism (Tank 4 Set)
+		bst[name] = 70845
+
+		name = getSpellInfo(72)
+		cds[72] = 12 -- Shield Bash
+		bst[name] = 72
+
+		name = getSpellInfo(871)
+		cds[871] = 300 -- Shield Wall
+		bst[name] = 871
 	end
 
 	-- iconCache[L["GCD"]] = GetSpellTexture(61304) -- cache special spell with GCD cooldown, must be valid

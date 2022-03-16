@@ -29,7 +29,7 @@ local optionsLoaded = false -- set when the load-on-demand options panel module 
 local optionsFailed = false -- set if loading the option panel module failed
 
 local C_Timer = MOD.C_Timer
-local IsInRaid = MOD.IsInRaid
+local IsInRaid, IsInGroup = MOD.IsInRaid, MOD.IsInGroup
 local GetNumGroupMembers = MOD.GetNumGroupMembers
 local GetSpecialization = MOD.GetSpecialization
 local GetSpecializationInfoByID = MOD.GetSpecializationInfoByID
@@ -42,10 +42,9 @@ MOD.db = nil
 MOD.ldb = nil
 MOD.ldbi = nil -- set when using DBIcon library
 MOD.LibLDB = nil
-MOD.myClass = nil
-MOD.localClass = nil
-MOD.myRace = nil
-MOD.localRace = nil
+MOD.myFaction = UnitFactionGroup("player")
+MOD.localClass, MOD.myClass = UnitClass("player") -- cache the player's class
+MOD.localRace, MOD.myRace = UnitRace("player") -- cache the player's race
 MOD.lockoutSpells = {} -- spells for testing lock out of each school of magic for current player
 MOD.classConditions = {} -- stores info about pre-defined conditions for each class
 MOD.talents = {} -- table containing names and talent table location for each talent
@@ -180,8 +179,6 @@ function MOD:OnInitialize()
 	end -- only run this code once
 	addonInitialized = true
 
-	MOD.localClass, MOD.myClass = UnitClass("player") -- cache the player's class
-	MOD.localRace, MOD.myRace = UnitRace("player") -- cache the player's race
 	LoadAddOn("LibDataBroker-1.1")
 	LoadAddOn("LibDBIcon-1.0")
 	LoadAddOn("LibBossIDs-1.0", true)
@@ -308,7 +305,7 @@ local function CheckMirrorFrames()
 	local p = MOD.db.profile
 	HideShow("mirror1", _G.MirrorTimer1, p.hideBlizzMirrors, "unreg")
 	HideShow("mirror2", _G.MirrorTimer2, p.hideBlizzMirrors, "unreg")
-	HideShow("mirror23", _G.MirrorTimer3, p.hideBlizzMirrors, "unreg")
+	HideShow("mirror3", _G.MirrorTimer3, p.hideBlizzMirrors, "unreg")
 end
 
 -- Functions called to trigger updates
@@ -337,10 +334,20 @@ local function CheckTalentSpecialization()
 	doUpdate = true
 end
 
+local function GetSpellID(spellName, spellRank)
+	local spellLink = GetSpellLink(spellName, spellRank)
+	if spellLink then
+		local _, _, _, _, spellID = spellLink:find("|?c?(%x*)|?H?([^:]*):?(%d+)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
+		return spellID and tonumber(spellID) or spellName
+	end
+	return spellName
+end
+
 -- Function called to detect global cooldowns
 local function CheckGCD(event, unit, spell)
 	if unit == "player" and spell then
-		local name = GetSpellInfo(spell) -- added verification of spell argument due to error seen while testing 1/1/2019
+		spell = (type(spell) == "string") and GetSpellID(spell) or spell
+		local name = GetSpellInfo(spell) or spell
 		if name and (name ~= "") then
 			local start, duration = GetSpellCooldown(spell)
 			if start and duration and (duration > 0) and (duration <= 1.5) then
@@ -356,7 +363,8 @@ local function CheckGCD(event, unit, spell)
 end
 
 -- Function called for successful spell cast
-local function CheckSpellCasts(event, unit, lineID, spellID)
+local function CheckSpellCasts(event, unit, spellName, spellRank)
+	local spellID = GetSpellID(spellName, spellRank)
 	CheckGCD(event, unit, spellID)
 	local name = GetSpellInfo(spellID)
 	if name and (name ~= "") and MOD.db.global.DetectSpellEffects then
@@ -604,56 +612,11 @@ local function GetUnitIDFromGUID(guid)
 			uid = nil
 		end
 	end
-	for _, unit in ipairs(units) do
+	for unit in MOD.UnitIterator() do
 		uid = CheckUnitIDs(unit, guid)
+		uid = uid or CheckUnitIDs(unit .. "target", guid)
 		if uid then
 			break
-		end
-	end -- first check primary units
-	local inRaid = IsInRaid()
-	if not uid and not inRaid then -- check party, party pet, and party target units
-		for i = 1, GetNumGroupMembers() do
-			uid = CheckUnitIDs("party" .. i, guid)
-			if uid then
-				break
-			end
-			uid = CheckUnitIDs("partypet" .. i, guid)
-			if uid then
-				break
-			end
-			uid = CheckUnitIDs("party" .. i .. "target", guid)
-			if uid then
-				break
-			end
-		end
-	end
-	if not uid and inRaid then -- check raid, raid pet, and raid target units
-		for i = 1, GetNumGroupMembers() do
-			uid = CheckUnitIDs("raid" .. i, guid)
-			if uid then
-				break
-			end
-			uid = CheckUnitIDs("raidpet" .. i, guid)
-			if uid then
-				break
-			end
-			uid = CheckUnitIDs("raid" .. i .. "target", guid)
-			if uid then
-				break
-			end
-		end
-	end
-	if not uid then -- check nameplates as last resort
-		for i = 1, 40 do
-			local np = nameplateUnits[i]
-			local id = UnitGUID(np)
-			if not id then
-				break
-			end
-			if id == guid then
-				uid = np
-				break
-			end
 		end
 	end
 	cacheUnits[guid] = uid
@@ -894,12 +857,10 @@ local function CombatLogTracker(event, ...)
 			local name, rank, icon, count, btype, duration, expire, caster, isStealable, sid, _
 			local isBuff, dst = true, GetUnitIDFromGUID(dstGUID)
 			if dst and UnitExists(dst) then
-				name, rank, icon, count, btype, duration, expire, caster, isStealable, _, sid =
-					MOD.UnitAuraSpellName(dst, spellName, "HELPFUL|PLAYER")
+				name, rank, icon, count, btype, duration, expire, caster, isStealable, _, sid = MOD.UnitAuraSpellName(dst, spellName, "HELPFUL|PLAYER")
 				if not name and (srcGUID ~= dstGUID) then -- don't get debuffs cast by player on self (e.g., Sated)
 					isBuff = false
-					name, rank, icon, count, btype, duration, expire, caster, isStealable, _, sid =
-						MOD.UnitAuraSpellName(dst, spellName, "HARMFUL|PLAYER")
+					name, rank, icon, count, btype, duration, expire, caster, isStealable, _, sid = MOD.UnitAuraSpellName(dst, spellName, "HARMFUL|PLAYER")
 				end
 				if sid and spellID and spellID ~= sid then
 					name = nil
@@ -1010,14 +971,9 @@ local function CombatLogTracker(event, ...)
 	end
 
 	if MOD.db.global.DetectSpellAlerts and spellID and not isMine then -- check for spell alerts only if have a spell id and non-player event
-		local stat, opts, pst = MOD.status, MOD.db.global.SpellAlerts, "solo"
-		if GetNumGroupMembers() > 0 then
-			if IsInRaid() then
-				pst = "raid"
-			else
-				pst = "party"
-			end
-		end
+		local stat, opts = MOD.status, MOD.db.global.SpellAlerts
+		local pst = IsInRaid() and "raid" or IsInGroup() and "party" or "solo"
+
 		if ((stat.inArena and opts.showArena) or ((pst == "solo") and opts.showSolo) or ((pst == "party") and opts.showParty) or ((pst == "raid") and opts.showRaid)) and (stat.inInstance or opts.showNotInstance) then -- check if spell alerts are enabled given player's current status
 			if eventEndCast[e] then
 				EndCastAlert(srcGUID)
@@ -1107,11 +1063,6 @@ function MOD:GetRaidTarget(id)
 	return nil
 end
 
--- When UI Scale changes need to recalculate pixel perfect settings and force a complete update
-function UIScaleChanged()
-	updateUIScale = true
-end
-
 -- Event called when addon is enabled
 function MOD:OnEnable()
 	if addonEnabled then
@@ -1161,7 +1112,6 @@ function MOD:OnEnable()
 	self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", CheckSpellCasts)
 	self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START", CheckCastBar)
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", CombatLogTracker)
-	self:RegisterEvent("UI_SCALE_CHANGED", UIScaleChanged)
 
 	self:RegisterEvent("PLAYER_FOCUS_CHANGED")
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", CheckTalentSpecialization)
@@ -1251,6 +1201,7 @@ function MOD:PLAYER_ENTERING_WORLD()
 		UpdateHandler() -- register for calls on every frame
 	end
 	if not InCombatLockdown() then
+		updateUIScale = true
 		collectgarbage("collect")
 	end -- recover deleted preset data but not if in combat
 end
@@ -2104,11 +2055,11 @@ local function GetTracking()
 		local tracking, trackingIcon, active = GetTrackingInfo(i)
 		if active then
 			found = true
-			AddAura("player", tracking, true, nil, 1, "Tracking", 0, "player", nil, nil, nil, trackingIcon, 0, "tracking", tracking)
+			AddAura("player", tracking, true, nil, 1, "Tracking", 0, "player", nil, trackingIcon, nil, "tracking", 0, "tracking", tracking)
 		end
 	end
 	if not found then
-		AddAura("player", notTracking, true, nil, 1, "Tracking", 0, "player", nil, nil, nil, notTrackingIcon, 0, "tracking", notTracking)
+		AddAura("player", notTracking, true, nil, 1, "Tracking", 0, "player", nil, notTrackingIcon, nil, "tracking", 0, "tracking", notTracking)
 	end
 end
 

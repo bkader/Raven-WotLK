@@ -2924,7 +2924,7 @@ local function DetectNewBuffs(unit, n, aura, isBuff, bp, vbp, bg)
 		b.isStealable = isStealable
 		b.isMagic = isMagic
 		b.isEnrage = isEnrage
-		UpdateBar(bp, vbp, bg, b, icon, aura[2], aura[5], aura[3], ttype, tt, ta, unit, aura[16], isMine)
+		UpdateBar(bp, vbp, bg, b, icon, aura[2], aura[5], aura[3], ttype, tt, ta, unit, aura[15], isMine)
 	end
 end
 
@@ -3080,7 +3080,7 @@ local function DetectNewDebuffs(unit, n, aura, isBuff, bp, vbp, bg)
 		b.isMagic = isMagic
 		b.isCurse = isCurse
 		b.isDisease = isDisease
-		UpdateBar(bp, vbp, bg, b, aura[8], aura[2], aura[5], aura[3], aura[4], tt, ta, unit, aura[16], isMine)
+		UpdateBar(bp, vbp, bg, b, aura[8], aura[2], aura[5], aura[3], aura[4], tt, ta, unit, aura[15], isMine)
 	end
 end
 
@@ -3420,7 +3420,7 @@ local function UpdateBarGroupBars(bp, vbp, bg)
 									end -- add space at end to make unique
 									bar.startReady = nil
 									bar.spellID = aura[14]
-									UpdateBar(bp, vbp, bg, bar, aura[8], aura[2], aura[5], aura[3], aura[4], aura[11], aura[12], bar.monitor, aura[16], isMine)
+									UpdateBar(bp, vbp, bg, bar, aura[8], aura[2], aura[5], aura[3], aura[4], aura[11], aura[12], bar.monitor, aura[15], isMine)
 									found = true
 								end
 							end

@@ -72,7 +72,6 @@ local mainUnits = {"player", "pet", "target", "focus", "targettarget", "focustar
 local partyUnits = {"party1", "party2", "party3", "party4"} -- optional party units
 local bossUnits = {"boss1", "boss2", "boss3", "boss4", "boss5"} -- optional boss units
 local arenaUnits = {"arena1", "arena2", "arena3", "arena4", "arena5"} -- optional arena units
-local nameplateUnits = {} -- cache of 40 nameplate unit ids
 local eventUnits = {"targettarget", "focustarget", "pettarget", "mouseover"} -- can't count on events for these units
 local tagUnits = {
 	player = true,
@@ -559,8 +558,7 @@ function MOD:AddTrackers(unit)
 		trackerMarker = trackerMarker + 1 -- unique tag for this pass
 		local i = 1
 		repeat
-			name, rank, icon, count, btype, duration, expire, caster, isStealable, _, spellID =
-				UnitAura(unit, i, "HELPFUL|PLAYER")
+			name, rank, icon, count, btype, duration, expire, caster, isStealable, _, spellID = UnitAura(unit, i, "HELPFUL|PLAYER")
 			if name and caster == "player" then
 				AddTracker(dstGUID, dstName, true, name, rank, icon, count, btype, duration, expire, caster, isStealable, spellID, nil, trackerMarker)
 				MOD.SetDuration(name, spellID, duration)
@@ -570,8 +568,7 @@ function MOD:AddTrackers(unit)
 		until not name
 		i = 1
 		repeat
-			name, rank, icon, count, btype, duration, expire, caster, isStealable, _, spellID =
-				UnitAura(unit, i, "HARMFUL|PLAYER")
+			name, rank, icon, count, btype, duration, expire, caster, isStealable, _, spellID = UnitAura(unit, i, "HARMFUL|PLAYER")
 			if name and caster == "player" then
 				if spellID ~= 146739 or duration ~= 0 or InCombatLockdown() then -- don't add Corruption if out-of-combat
 					AddTracker(dstGUID, dstName, false, name, rank, icon, count, btype, duration, expire, caster, isStealable, spellID, trackerMarker)
@@ -1031,17 +1028,11 @@ local function CheckRaidTargets()
 	for _, unit in pairs(units) do
 		CheckRaidTarget(unit)
 	end -- first check primary units
-	if IsInRaid() then
-		for i = 1, GetNumGroupMembers() do
-			CheckRaidTarget("raid" .. i)
-			CheckRaidTarget("raidpet" .. i)
-			CheckRaidTarget("raid" .. i .. "target")
-		end
-	else
-		for i = 1, GetNumGroupMembers() do
-			CheckRaidTarget("party" .. i)
-			CheckRaidTarget("partypet" .. i)
-			CheckRaidTarget("party" .. i .. "target")
+	for unit, owner in MOD.UnitIterator() do
+		if owner == nil then
+			CheckRaidTarget(unit)
+			CheckRaidTarget(unit .. "pet")
+			CheckRaidTarget(unit .. "target")
 		end
 	end
 end
@@ -1170,9 +1161,6 @@ function MOD:InitializeUnits()
 		for _, k in pairs(arenaUnits) do
 			table.insert(units, k)
 		end
-	end
-	for i = 1, 40 do
-		nameplateUnits[i] = "nameplate" .. i
 	end
 end
 
@@ -1753,9 +1741,8 @@ end
 -- For all active auras on a given unit (if isBuff is true only buffs, otherwise only debuff), call the function that
 -- is passed in with the unit, aura name, aura descriptor table, isBuff, and two optional parameters passed in
 function MOD:IterateAuras(unit, func, isBuff, p1, p2, p3)
-	local auraTable
 	if unit == "all" then -- special case to get auras cast by player on multiple targets
-		auraTable = isBuff and unitBuffs or unitDebuffs
+		local auraTable = isBuff and unitBuffs or unitDebuffs
 		for _, tracker in pairs(auraTable) do
 			for _, t in pairs(tracker) do
 				SetAuraTimeLeft(t) -- update timeLeft from current time
@@ -1767,7 +1754,7 @@ function MOD:IterateAuras(unit, func, isBuff, p1, p2, p3)
 	else
 		unit = MOD:UnitStatusUpdate(unit)
 		if unit then
-			auraTable = isBuff and activeBuffs[unit] or activeDebuffs[unit]
+			local auraTable = isBuff and activeBuffs[unit] or activeDebuffs[unit]
 			if auraTable then
 				for _, b in pairs(auraTable) do
 					SetAuraTimeLeft(b) -- update timeLeft from current time
@@ -2267,17 +2254,11 @@ function MOD:UpdateTrackers()
 		MOD:AddTrackers("player")
 		MOD:AddTrackers("target")
 		MOD:AddTrackers("focus")
-		if IsInRaid() then
-			for i = 1, GetNumGroupMembers() do
-				MOD:AddTrackers("raid" .. i)
-				MOD:AddTrackers("raidpet" .. i)
-				MOD:AddTrackers("raid" .. i .. "target")
-			end
-		else
-			for i = 1, GetNumGroupMembers() do
-				MOD:AddTrackers("party" .. i)
-				MOD:AddTrackers("partypet" .. i)
-				MOD:AddTrackers("party" .. i .. "target")
+		for unit, owner in MOD.UnitIterator() do
+			if owner == nil then
+				MOD:AddTrackers(unit)
+				MOD:AddTrackers(unit .. "pet")
+				MOD:AddTrackers(unit .. "target")
 			end
 		end
 		local pgid = UnitGUID("pet")
@@ -2287,14 +2268,6 @@ function MOD:UpdateTrackers()
 		petGUID = pgid
 		if pgid then
 			MOD:AddTrackers("pet")
-		end
-		for i = 1, 40 do -- nameplate scanning improves accuracy dramatically
-			local np = nameplateUnits[i]
-			if UnitExists(np) then
-				MOD:AddTrackers(np)
-			else
-				break
-			end
 		end
 	end
 end

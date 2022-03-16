@@ -44,6 +44,8 @@ local function IsOn(value)
 	return value ~= nil and value ~= Off
 end -- return true if option is turned on
 
+local IsRuneSpellReady = MOD.IsRuneSpellReady
+
 -- Initialization settings for each test type (note that nil values are placeholders for documentation purposes)
 MOD.conditionTests = {
 	["Player Status"] = {
@@ -81,7 +83,9 @@ MOD.conditionTests = {
 		checkComboPoints = nil,
 		minComboPoints = 5,
 		checkRunes = nil,
-		minRunes = 1,
+		needBlood = nil,
+		needFrost = nil,
+		needUnholy = nil,
 		checkTotems = nil,
 		totem = nil
 	},
@@ -911,7 +915,7 @@ local function CheckTestAND(ttype, t)
 		if IsOn(t.checkStance) and IsOn(t.stance) and (t.stance ~= stat.stance) then
 			return false
 		end
-		if IsOn(t.checkRunes) and IsOn(t.minRunes) and (t.checkRunes ~= (MOD.runeCount >= t.minRunes)) then
+		if IsOn(t.checkRunes) and not IsRuneSpellReady(t.needBlood, t.needFrost, t.needUnholy) then
 			return false
 		end
 		if IsOn(t.checkTotems) and IsOn(t.totem) and not CheckTotem(t.totem) then
@@ -1254,7 +1258,7 @@ local function CheckTestOR(ttype, t)
 		if IsOn(t.checkStance) and IsOn(t.stance) and (t.stance == stat.stance) then
 			return true
 		end
-		if IsOn(t.checkRunes) and IsOn(t.minRunes) and (t.checkRunes == (MOD.runeCount >= t.minRunes)) then
+		if IsOn(t.checkRunes) and not IsRuneSpellReady(t.needBlood, t.needFrost, t.needUnholy) then
 			return true
 		end
 		if IsOn(t.checkTotems) and IsOn(t.totem) and CheckTotem(t.totem) then
@@ -2080,13 +2084,28 @@ function MOD:GetConditionText(name)
 						a = a .. d .. L["Spell String"](t.spell)
 						d = ", "
 					end
-					if IsOn(t.checkRunes) and t.minRunes then
-						local x = "<"
-						if t.checkRunes then
-							x = ">="
+					if IsOn(t.checkRunes) and (t.needBlood or t.needFrost or t.needUnholy) then
+						a = a .. d .. " "
+						local p, pc = "", 0
+						if t.needBlood then
+							a = a .. "Blood"
+							p = "+"
+							pc = pc + 1
 						end
-						a = a .. d .. L["Runes String"](x, t.minRunes)
-						d = ", "
+						if t.needFrost then
+							a = a .. p .. "Frost"
+							p = "+"
+							pc = pc + 1
+						end
+						if t.needUnholy then
+							a = a .. p .. "Unholy"
+							pc = pc + 1
+						end
+						a = a .. " Rune"
+						if pc > 1 then
+							a = a .. "s"
+						end
+						d = ","
 					end
 					if IsOn(t.checkTotems) and t.totem then
 						a = a .. d .. L["Totem String"](t.totem)

@@ -105,7 +105,6 @@ L["Level String"] = function(x, level) return string.format("Level %s %d", x, le
 L["Health String"] = function(x, minHealth) return string.format("Health %s %d%%", x, minHealth) end
 L["Power String"] = function(x, minPower) return string.format("Power %s %d", x, minPower) end
 L["Combo Pts String"] = function(x, minComboPoints) return string.format("Combo Pts %s %d", x, minComboPoints) end
-L["Runes String"] = function(x, minRunes) return string.format("Runes %s %d", x, minRunes) end
 L["Stance String"] = function(stance) return string.format("Stance = \"%s\"", stance) end
 L["Totem String"] = function(totem) return string.format("Totem = \"%s\"", totem) end
 L["Talent String"] = function(talent) return string.format("Talent = \"%s\"", talent) end
@@ -1583,8 +1582,13 @@ L["If checked, test the player's power (i.e., mana, rage, energy, focus, runic p
 L["If checked, player's power must be at least this percentage, otherwise must be less."] = true
 L["Available"] = true
 L["Any"] = true
-L["If checked, test how many available runes the player has."] = true
-L["If checked, player must have at least this many available runes, otherwise must be fewer."] = true
+L["Blood Rune"] = COMBAT_TEXT_RUNE_BLOOD
+L["Frost Rune"] = COMBAT_TEXT_RUNE_FROST
+L["Unholy Rune"] = COMBAT_TEXT_RUNE_UNHOLY
+L["If checked, test the player's rune availability."] = true
+L["If checked, player must have at least one blood rune (or enough death runes)."] = true
+L["If checked, player must have at least one frost rune (or enough death runes)."] = true
+L["If checked, player must have at least one unholy rune (or enough death runes)."] = true
 L["If checked, test how many combo points the player has on the target."] = true
 L["If checked, player must have at least this many combo points, otherwise must be fewer."] = true
 L["If checked, test the player's totem status."] = true

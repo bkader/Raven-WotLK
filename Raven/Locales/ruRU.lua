@@ -105,7 +105,6 @@ L["Level String"] = function(x, level) return string.format("Уровень %s %
 L["Health String"] = function(x, minHealth) return string.format("Здоровье %s %d%%", x, minHealth) end --function(x, minHealth) return string.format("Health %s %d%%", x, minHealth) end
 L["Power String"] = function(x, minPower) return string.format("Сила атаки %s %d", x, minPower) end --function(x, minPower) return string.format("Power %s %d", x, minPower) end
 L["Combo Pts String"] = function(x, minComboPoints) return string.format("Серия приемов %s %d", x, minComboPoints) end --function(x, minComboPoints) return string.format("Combo Pts %s %d", x, minComboPoints) end
-L["Runes String"] = function(x, minRunes) return string.format("Руны %s %d", x, minRunes) end --function(x, minRunes) return string.format("Runes %s %d", x, minRunes) end
 L["Stance String"] = function(stance) return string.format("Стойка = \"%s\"", stance) end --function(stance) return string.format("Stance = \"%s\"", stance) end
 L["Totem String"] = function(totem) return string.format("Тотем = \"%s\"", totem) end --function(totem) return string.format("Totem = \"%s\"", totem) end
 L["Talent String"] = function(talent) return string.format("Талант = \"%s\"", talent) end --function(talent) return string.format("Talent = \"%s\"", talent) end
@@ -1587,8 +1586,6 @@ L["If checked, test the player's power (i.e., mana, rage, energy, focus, runic p
 L["If checked, player's power must be at least this percentage, otherwise must be less."] = "Если отмечено, энергия игрока должна быть хотя бы этих процентов, в противном случае меньше."
 L["Available"] = "Доступно"
 L["Any"] = "Любые"
-L["If checked, test how many available runes the player has."] = "Если отмечено, тестировать как много рун имеет игрок."
-L["If checked, player must have at least this many available runes, otherwise must be fewer."] = "Если отмечено, игрок должен иметь хотя бы столько доступных Рун, в противном случае меньше."
 L["If checked, test how many combo points the player has on the target."] = "Если отмечено, тестировать Длину серии приемов имеет игрок на цели."
 L["If checked, player must have at least this many combo points, otherwise must be fewer."] = "Если отмечено, игрок должен иметь хотя бы такую Длину серии приемов, в противном случае меньше."
 L["If checked, test the player's totem status."] = "Если отмечено, тестировать статус тотемов игрока."

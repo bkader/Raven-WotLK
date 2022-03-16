@@ -50,7 +50,6 @@ MOD.classConditions = {} -- stores info about pre-defined conditions for each cl
 MOD.talents = {} -- table containing names and talent table location for each talent
 MOD.talentList = {} -- table with list of talent names
 MOD.runeSlots = {} -- cache information about each rune slot for DKs
-MOD.runeCount = 0 -- current number of available runes
 MOD.updateActions = true -- action bar changed
 MOD.updateDispels = true -- need to update dispel types
 MOD.knownBrokers = {} -- table of registered data brokers
@@ -2425,35 +2424,71 @@ end
 
 -- Update info about the rune slots and add rune cooldowns
 local function CheckRunes()
-	local count = 0
+	local blood, frost, unholy, death = 0, 0, 0, 0
 	for i = 1, 6 do
-		local rune = MOD.runeSlots[i]
+		local rune, rtype = MOD.runeSlots[i], GetRuneType(i)
 		local start, duration, ready = GetRuneCooldown(i)
 		if not rune then
-			rune = {start = start, duration = duration, ready = ready}
+			rune = {type = rtype, start = start, duration = duration, ready = ready}
 			MOD.runeSlots[i] = rune
 		else
+			rune.type = rtype
 			rune.start = start
 			rune.duration = duration
 			rune.ready = ready
 		end
-		if ready then
-			count = count + 1
+	end
+end
+
+-- Return true only if the specified runes are available, with death runes serving as wildcards
+local function IsRuneSpellReady(blood, frost, unholy)
+	local b, f, u, d = 0, 0, 0, 0
+	for i = 1, 6 do
+		if MOD.runeSlots[i].ready then
+			local t = MOD.runeSlots[i].type
+			if t == 1 then
+				b = b + 1
+			elseif t == 2 then
+				f = f + 1
+			elseif t == 3 then
+				u = u + 1
+			elseif t == 4 then
+				d = d + 1
+			end
 		end
 	end
-	MOD.runeCount = count
+	if blood and b < 1 then
+		if d < 1 then
+			return false
+		else
+			d = d - 1
+		end
+	end
+	if frost and f < 1 then
+		if d < 1 then
+			return false
+		else
+			d = d - 1
+		end
+	end
+	if unholy then
+		if u < 1 and d < 1 then
+			return false
+		end
+	end
+	return true
 end
+MOD.IsRuneSpellReady = IsRuneSpellReady
 
 -- Check if the spell is on cooldown because a rune is not available, return true only if on real cooldown
 local function CheckRuneCooldown(name, duration)
 	local runes = MOD.runeSpells[name]
-	if runes and runes.count then
-		if MOD.runeCount >= runes.count then
+	if runes then
+		if IsRuneSpellReady(runes.blood, runes.frost, runes.unholy) then
 			return true
-		end -- runes are available so real cooldown
-		if duration <= 10 then
+		elseif duration >= 9 and duration <= 10 then
 			return false
-		end -- no spells that use runes have duration less than 10 seconds
+		end
 	end
 	return true
 end

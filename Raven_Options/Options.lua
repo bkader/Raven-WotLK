@@ -10144,22 +10144,30 @@ MOD.OptionsTable = {
 									args = {
 										CheckRunes = {
 											type = "toggle", order = 10, name = L["Enable"], width = "half",
-											desc = L["If checked, test how many available runes the player has."],
+											desc = L["If checked, test the player's rune availability."],
 											get = function(info) return IsTestFieldOn("Player Status", "checkRunes") end,
 											set = function(info, value) local v = Off if value then v = true end SetTestField("Player Status", "checkRunes", v) end,
 										},
-										CheckMinimum = {
-											type = "toggle", order = 20, name = L["Minimum"],
-											desc = L["If checked, player must have at least this many available runes, otherwise must be fewer."],
+										DoBlood = {
+											type = "toggle", order = 20, name = L["Blood Rune"], width = "half",
+											desc = L["If checked, player must have at least one blood rune (or enough death runes)."],
 											disabled = function(info) return IsTestFieldOff("Player Status", "checkRunes") end,
-											get = function(info) return GetTestField("Player Status", "checkRunes") == true end,
-											set = function(info, value) SetTestField("Player Status", "checkRunes", value) end,
+											get = function(info) return GetTestField("Player Status", "needBlood") == true end,
+											set = function(info, value) SetTestField("Player Status", "needBlood", value) end,
 										},
-										RuneCount = {
-											type = "range", order = 30, name = "", min = 1, max = 6, step = 1,
+										DoFrost = {
+											type = "toggle", order = 30, name = L["Frost Rune"], width = "half",
+											desc = L["If checked, player must have at least one frost rune (or enough death runes)."],
 											disabled = function(info) return IsTestFieldOff("Player Status", "checkRunes") end,
-											get = function(info) return GetTestField("Player Status", "minRunes") end,
-											set = function(info, value) SetTestField("Player Status", "minRunes", value) end,
+											get = function(info) return GetTestField("Player Status", "needFrost") == true end,
+											set = function(info, value) SetTestField("Player Status", "needFrost", value) end,
+										},
+										DoUnholy = {
+											type = "toggle", order = 40, name = L["Unholy Rune"], width = "half",
+											desc = L["If checked, player must have at least one unholy rune (or enough death runes)."],
+											disabled = function(info) return IsTestFieldOff("Player Status", "checkRunes") end,
+											get = function(info) return GetTestField("Player Status", "needUnholy") == true end,
+											set = function(info, value) SetTestField("Player Status", "needUnholy", value) end,
 										},
 									},
 								},

@@ -22,7 +22,7 @@ For more details about the addon and how to use it, please visit Raven's [CurseF
 
 ## Show Love & Support
 
-Though it's not required, **PayPal** donations are most welcome at **bkader[at]mail.com**, or via Discord [Donate Bot](https://donatebot.io/checkout/795698054371868743).
+Though it's not required, **PayPal**/**Paysera** donations are most welcome to **bkader[at]mail.com**.
 
 ## >>> IMPORTANT <<<
 
